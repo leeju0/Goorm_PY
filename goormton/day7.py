@@ -1,18 +1,38 @@
+# 입력
 
-
-
-#input().split() : 사용자가 입력한 텍스트 줄을 문자열 목록으로 분할, 분할은 공백문자 기준으로
-#map(int, input().split()) : 분할 목록 각 요소 int형으로 변환
-#만약 5 10 이라 입력하면 [5 10] 목록을 얻게 된다.
 N, K = map(int, input().split())
 
 matrix = []
 
-# _ 은 특정 횟수만큼 반복하지만, 루프 변수 자체를 사용하지 않는 경우 사용한다.
 for _ in range(N):
 	row = list(input().split())
 	matrix.append(row)
 
-# 출력
-for row in matrix:
-    print(row)
+# dy/dx
+dy = [-1, -1, 0, +1, +1, +1, 0, -1]  # 수직이동
+dx = [0, -1, -1, -1, 0, +1, +1, +1]  # 수평이동
+
+result = 0
+
+# N x N 배열
+for i in range(N):
+    for j in range(N):
+        if matrix[i][j] == "1": # i,j = (1,1)인 경우를 제외하고 모든 위치 탐색
+            continue
+
+        check = 0 #주변 구름 수
+
+        # dy/dx 탐색
+        for k in range(8): #행렬 모든 행과 열을 탐색하면서 주변구름수가 K인 인덱스의 갯수가 몇개인지 구하는 반복문이다.
+            y = i + dy[k]
+            x = j + dx[k]
+            if y < 0 or y >= N or x < 0 or x >= N:
+                continue
+
+            if matrix[y][x] == '1': #인근 8개 탐색하면서 해당 매트릭스 내부 변수 값이 1인경우
+                check +=1 #주변 구름수 +1
+
+        if check == K: #만약 check의 개수가 입력값 K와 같다면 result +=1
+            result +=1
+
+print(result)
